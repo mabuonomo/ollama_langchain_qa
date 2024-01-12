@@ -33,6 +33,7 @@ Credits to [NVIDIA](https://developer.nvidia.com/cuda-zone) for CUDA.
 
 * [Docker](https://docs.docker.com/get-docker/)
 * [NVIDIA Container Toolkit Installation](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/1.14.3/install-guide.html)
+* A good PC with a good GPU :)
 
 ## 🚀 Getting Started
 
