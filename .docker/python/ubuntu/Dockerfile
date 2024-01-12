@@ -1,4 +1,4 @@
-FROM python:3.10-slim
+FROM python:3.11-slim
 
 ENV PIP_ROOT_USER_ACTION=ignore
 
@@ -9,6 +9,3 @@ WORKDIR /app
 
 RUN python -m pip install --upgrade pip
 RUN pip --version
-
-ADD src/requirements.txt /app/
-RUN pip install --no-cache-dir -r /app/requirements.txt

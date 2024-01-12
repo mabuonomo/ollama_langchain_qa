@@ -1,21 +1,21 @@
 version: "3.8"
 
 services:
-  ollama_chat_devcontainer:
-    container_name: ollama_chat_devcontainer
+  qa_ollama_python:
+    container_name: qa_ollama_python
     build:
       context: .
       dockerfile: .docker/python/ubuntu/Dockerfile
     tty: true
     depends_on:
-      - ollama_chat 
+      - qa_ollama_server 
     volumes:
       - ./:/app
     env_file:
       - .env
 
-  ollama_chat:
-    container_name: ollama_chat
+  qa_ollama_server:
+    container_name: qa_ollama_server
     image: ollama/ollama
     volumes:
       - .ollama:/root/.ollama

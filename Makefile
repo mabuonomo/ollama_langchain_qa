@@ -1,5 +1,5 @@
-DOCKER_PYTHON_EXEC:= docker compose exec ollama_chat_devcontainer
-DOCKER_CHAT_EXEC:= docker compose exec ollama_chat
+DOCKER_PYTHON_EXEC:= docker compose exec qa_ollama_python
+DOCKER_CHAT_EXEC:= docker compose exec qa_ollama_server
 
 __start:
 	docker compose up -d --remove-orphans
