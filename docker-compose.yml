@@ -1,0 +1,27 @@
+version: "3.7"
+
+services:
+  ollama_chat_devcontainer:
+    container_name: ollama_chat_devcontainer
+    build:
+      context: .
+      dockerfile: .docker/python/ubuntu/Dockerfile
+    tty: true
+    ports:
+      - "8501:8501"
+    volumes:
+      - ./:/app
+
+  ollama_chat:
+    container_name: ollama_chat
+    image: ollama/ollama
+    tty: true
+    volumes:
+      - .ollama:/root/.ollama
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
