@@ -14,6 +14,7 @@ from langchain.vectorstores import Chroma
 from langchain.chains import ConversationalRetrievalChain
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.chains import RetrievalQA
+from langchain_community.document_loaders import JSONLoader
 
 ollama_url = os.getenv("OLLAMA_URL", "http://ollama_chat:11434")
 ollama_model = os.getenv("OLLAMA_MODEL", "mistral")
@@ -39,7 +40,7 @@ for file in os.listdir('src/docs'):
         documents.extend(loader.load())
 
 # text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=10)
-text_splitter=RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=0)
+text_splitter=RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=20)
 chunked_documents = text_splitter.split_documents(documents)
 
 print(f"Loaded {len(documents)} documents")
@@ -88,5 +89,5 @@ while True:
 
     result = qachain({"query": query})
 
-    print(f"{white}Answer: " + result["answer"])
+    print(f"{white}Answer: " + result["result"])
     # chat_history.append((query, result["answer"]))
