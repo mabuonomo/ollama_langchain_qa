@@ -11,6 +11,9 @@ from langchain.text_splitter import CharacterTextSplitter
 from langchain.vectorstores import Chroma
 from langchain.chains import ConversationalRetrievalChain
 
+ollama_url = "http://ollama_chat:11434"
+ollama_model = "mistral"
+
 documents = []
 for file in os.listdir('src/docs'):
     if file.endswith('.pdf'):
@@ -31,16 +34,16 @@ chunked_documents = text_splitter.split_documents(documents)
 
 vectordb = Chroma.from_documents(documents, embedding=
     OllamaEmbeddings(
-        base_url="http://cowtechgo_chat_ollama:11434",
-        model="mistral"
+        base_url=ollama_url,
+        model=ollama_model
     ), 
     persist_directory="./data")
 vectordb.persist()
 
 pdf_qa = ConversationalRetrievalChain.from_llm(
     Ollama(
-        base_url="http://cowtechgo_chat_ollama:11434",
-        model="mistral"
+        base_url=ollama_url,
+        model=ollama_model
         ),
     vectordb.as_retriever(search_kwargs={'k': 6}),
     return_source_documents=True,
