@@ -1,3 +1,5 @@
+# https://github.com/jmorganca/ollama/blob/main/docs/tutorials/langchainpy.md
+
 import os
 import sys
 
@@ -10,9 +12,13 @@ from langchain.document_loaders import TextLoader
 from langchain.text_splitter import CharacterTextSplitter
 from langchain.vectorstores import Chroma
 from langchain.chains import ConversationalRetrievalChain
+from langchain.text_splitter import RecursiveCharacterTextSplitter
 
-ollama_url = "http://ollama_chat:11434"
-ollama_model = "mistral"
+ollama_url = os.getenv("OLLAMA_URL", "http://ollama_chat:11434")
+ollama_model = os.getenv("OLLAMA_MODEL", "mistral")
+vectordb_path = os.getenv("VECTORDB_PATH", ".data")
+
+print(f"Using Ollama at {ollama_url} with model {ollama_model}")
 
 documents = []
 for file in os.listdir('src/docs'):
@@ -29,16 +35,22 @@ for file in os.listdir('src/docs'):
         loader = TextLoader(text_path)
         documents.extend(loader.load())
 
-text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=10)
+# text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=10)
+text_splitter=RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=0)
 chunked_documents = text_splitter.split_documents(documents)
 
-vectordb = Chroma.from_documents(documents, embedding=
-    OllamaEmbeddings(
+print(f"Loaded {len(documents)} documents")
+
+vectordb = Chroma.from_documents(
+    documents, 
+    embedding=OllamaEmbeddings(
         base_url=ollama_url,
         model=ollama_model
     ), 
-    persist_directory="./data")
+    persist_directory=vectordb_path)
 vectordb.persist()
+
+print(f"Created vectorstore")
 
 pdf_qa = ConversationalRetrievalChain.from_llm(
     Ollama(
@@ -47,8 +59,10 @@ pdf_qa = ConversationalRetrievalChain.from_llm(
         ),
     vectordb.as_retriever(search_kwargs={'k': 6}),
     return_source_documents=True,
-    verbose=False
+    verbose=True
 )
+
+print(f"Created QA chain")
 
 yellow = "\033[0;33m"
 green = "\033[0;32m"
@@ -64,8 +78,13 @@ while True:
         print('Exiting')
         sys.exit()
     if query == '':
+        print('Query cannot be empty. Please enter a valid query.')
         continue
     result = pdf_qa(
-        {"question": query, "chat_history": chat_history})
+        {
+            "question": query, 
+            "chat_history": chat_history
+        }
+    )
     print(f"{white}Answer: " + result["answer"])
     chat_history.append((query, result["answer"]))
