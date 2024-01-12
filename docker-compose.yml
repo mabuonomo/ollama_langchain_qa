@@ -7,10 +7,12 @@ services:
       context: .
       dockerfile: .docker/python/ubuntu/Dockerfile
     tty: true
-    ports:
-      - "8501:8501"
+    depends_on:
+      - ollama_chat 
     volumes:
       - ./:/app
+    env_file:
+      - .env
 
   ollama_chat:
     container_name: ollama_chat
