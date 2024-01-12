@@ -21,22 +21,25 @@ ollama_model = os.getenv("OLLAMA_MODEL", "mistral")
 vectordb_path = os.getenv("VECTORDB_PATH", ".data")
 ollama_obj = Ollama(base_url=ollama_url, model=ollama_model)
 ollama_embeddings = OllamaEmbeddings(base_url=ollama_url, model=ollama_model)
+docs_dir = os.getenv("DOCS_DIR", "./src/docs")
 
 print(f"Using Ollama at {ollama_url} with model {ollama_model}")
 
 documents = []
-for file in os.listdir('src/docs'):
+for file in os.listdir(docs_dir):
+    file_path = os.path.join(docs_dir, file)
+
+    if file.endswith('.json'):
+        loader = JSONLoader(file_path)
+        documents.extend(loader.load())
     if file.endswith('.pdf'):
-        pdf_path = './src/docs/' + file
-        loader = PyPDFLoader(pdf_path)
+        loader = PyPDFLoader(file_path)
         documents.extend(loader.load())
     elif file.endswith('.docx') or file.endswith('.doc'):
-        doc_path = './src/docs/' + file
-        loader = Docx2txtLoader(doc_path)
+        loader = Docx2txtLoader(file_path)
         documents.extend(loader.load())
     elif file.endswith('.txt'):
-        text_path = './src/docs/' + file
-        loader = TextLoader(text_path)
+        loader = TextLoader(file_path)
         documents.extend(loader.load())
 
 # text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=10)
@@ -53,13 +56,6 @@ vectordb.persist()
 
 print(f"Created vectorstore")
 
-# pdf_qa = ConversationalRetrievalChain.from_llm(
-#     ollama_obj,
-#     vectordb.as_retriever(search_kwargs={'k': 6}),
-#     return_source_documents=True,
-#     verbose=True
-# )
-
 qachain=RetrievalQA.from_chain_type(ollama_obj, retriever=vectordb.as_retriever())
 
 print(f"Created QA chain")
@@ -68,9 +64,8 @@ yellow = "\033[0;33m"
 green = "\033[0;32m"
 white = "\033[0;39m"
 
-# chat_history = []
 print(f"{yellow}---------------------------------------------------------------------------------")
-print('Welcome to the DocBot. You are now ready to start interacting with your documents')
+print('Welcome to the OllamaBot! Ask me a question about the documents in the docs folder.')
 print('---------------------------------------------------------------------------------')
 while True:
     query = input(f"{green}Prompt: ")
@@ -80,14 +75,6 @@ while True:
     if query == '':
         print('Query cannot be empty. Please enter a valid query.')
         continue
-    # result = pdf_qa(
-    #     {
-    #         "question": query, 
-    #         "chat_history": chat_history
-    #     }
-    # )
-
     result = qachain({"query": query})
 
     print(f"{white}Answer: " + result["result"])
-    # chat_history.append((query, result["answer"]))
