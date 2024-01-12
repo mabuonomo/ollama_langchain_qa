@@ -1,7 +1,5 @@
 # Ollama QA | Fully Dockerized with Nvidia GPU Support
 
-## Overview
-
 Ollama QA is an advanced chatbot designed for document-oriented inquiries. Utilizing the Retrieval-Augmented Generation (RAG) approach, it seamlessly integrates powerful language models, such as Llama 2 and Mistral AI, with information retrieval to deliver comprehensive responses. Ollama simplifies the deployment process by enabling local execution through a unified Modelfile package, ensuring efficient GPU utilization.
 
 Explore the capabilities of Ollama at [Ollama's official blog](https://ollama.ai/blog/ollama-is-now-available-as-an-official-docker-image).
