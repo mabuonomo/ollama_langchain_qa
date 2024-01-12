@@ -1,14 +1,12 @@
-DOCKER_EXEC:= docker compose exec ollama_chat_devcontainer
+DOCKER_PYTHON_EXEC:= docker compose exec ollama_chat_devcontainer
+DOCKER_CHAT_EXEC:= docker compose exec ollama_chat
 
 __start:
 	docker compose up -d --remove-orphans
 
-# control + D to exit
-ollama_download_mistral: __start
-	docker compose exec -it ollama_chat ollama run mistral  
-
 run: __start
-	$(DOCKER_EXEC) python src/test.multidocument.py
+	${DOCKER_CHAT_EXEC} ollama pull mistral
+	${DOCKER_PYTHON_EXEC} python src/test.multidocument.py
 
 bash: __start
-	$(DOCKER_EXEC) bash
+	$(DOCKER_PYTHON_EXEC) bash

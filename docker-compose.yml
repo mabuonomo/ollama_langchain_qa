@@ -1,4 +1,4 @@
-version: "3.7"
+version: "3.8"
 
 services:
   ollama_chat_devcontainer:
@@ -17,9 +17,9 @@ services:
   ollama_chat:
     container_name: ollama_chat
     image: ollama/ollama
-    tty: true
     volumes:
       - .ollama:/root/.ollama
+    tty: true
     deploy:
       resources:
         reservations:

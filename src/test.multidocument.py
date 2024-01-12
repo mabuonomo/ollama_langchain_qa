@@ -16,6 +16,9 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.chains import RetrievalQA
 from langchain_community.document_loaders import JSONLoader
 
+from dotenv import load_dotenv
+load_dotenv()
+
 ollama_url = os.getenv("OLLAMA_URL", "http://ollama_chat:11434")
 ollama_model = os.getenv("OLLAMA_MODEL", "mistral")
 vectordb_path = os.getenv("VECTORDB_PATH", ".data")
@@ -23,6 +26,9 @@ ollama_obj = Ollama(base_url=ollama_url, model=ollama_model)
 ollama_embeddings = OllamaEmbeddings(base_url=ollama_url, model=ollama_model)
 docs_dir = os.getenv("DOCS_DIR", "./src/docs")
 
+# print vars
+print(f"Using docs at {docs_dir}")
+print(f"Using vectordb at {vectordb_path}")
 print(f"Using Ollama at {ollama_url} with model {ollama_model}")
 
 documents = []
