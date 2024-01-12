@@ -16,9 +16,6 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.chains import RetrievalQA
 from langchain_community.document_loaders import JSONLoader
 
-from dotenv import load_dotenv
-load_dotenv()
-
 ollama_url = os.getenv("OLLAMA_URL", "http://ollama_chat:11434")
 ollama_model = os.getenv("OLLAMA_MODEL", "mistral")
 vectordb_path = os.getenv("VECTORDB_PATH", ".data")
