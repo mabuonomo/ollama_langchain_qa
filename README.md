@@ -54,6 +54,10 @@ make run
 
 ![screen1.png](./assets/screen1.png)
 
+## 🚀 Deep dive
+
+* [Youtube screencast](https://www.youtube.com/watch?v=-au5fqLUsCw)
+
 ## 📝 References
 
 * [Ollama](https://ollama.ai/blog/ollama-is-now-available-as-an-official-docker-image)
