@@ -17,7 +17,7 @@ from langchain.chains import RetrievalQA
 from langchain_community.document_loaders import JSONLoader
 
 ollama_url = os.getenv("OLLAMA_URL", "http://ollama_chat:11434")
-ollama_model = os.getenv("OLLAMA_MODEL", "mistral")
+ollama_model = os.getenv("OLLAMA_MODEL", "llama3")
 vectordb_path = os.getenv("VECTORDB_PATH", ".data")
 ollama_obj = Ollama(base_url=ollama_url, model=ollama_model)
 ollama_embeddings = OllamaEmbeddings(base_url=ollama_url, model=ollama_model)
@@ -50,7 +50,9 @@ text_splitter=RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=20)
 chunked_documents = text_splitter.split_documents(documents)
 
 print(f"Loaded {len(documents)} documents")
+print(f"Split documents into {len(chunked_documents)} chunks")
 
+print(f"Creating vectorstore")
 vectordb = Chroma.from_documents(
     documents, 
     embedding=ollama_embeddings, 
