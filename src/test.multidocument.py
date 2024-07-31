@@ -23,6 +23,8 @@ ollama_obj = Ollama(base_url=ollama_url, model=ollama_model)
 ollama_embeddings = OllamaEmbeddings(base_url=ollama_url, model=ollama_model)
 docs_dir = os.getenv("DOCS_DIR", "./src/docs")
 
+print("Loading Ollama model type %s from %s" % (ollama_model, ollama_url))
+
 # print vars
 print(f"Using docs at {docs_dir}")
 print(f"Using vectordb at {vectordb_path}")
